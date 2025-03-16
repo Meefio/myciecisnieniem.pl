@@ -11915,7 +11915,7 @@ Webflow.require('ix2').init({
 							],
 						},
 						{
-							keyframe: 62,
+							keyframe: 55,
 							actionItems: [
 								{
 									id: 'a-5-n-2',
@@ -12381,7 +12381,7 @@ Webflow.require('ix2').init({
 							],
 						},
 						{
-							keyframe: 55,
+							keyframe: 49,
 							actionItems: [
 								{
 									id: 'a-10-n-3',

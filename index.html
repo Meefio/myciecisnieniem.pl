@@ -558,10 +558,8 @@
       </div>
     </section>
     <section id="galeria" class="section-gallery">
-      <div class="container">
-        <p class="paragraph">Osiągnięcia w czystości</p>
-        <h2>Galeria realizacji</h2>
-        <div class="gallery-slider">
+
+      <!-- <div class="gallery-slider">
           <div class="slick-slide"><img src="images/photo-1-min.png" loading="eager"
               sizes="(max-width: 479px) 100vw, (max-width: 767px) 96vw, (max-width: 991px) 92vw, 91vw"
               srcset="images/photo-1-min-p-500.png 500w, images/photo-1-min-p-800.png 800w, images/photo-1-min-p-1080.png 1080w, images/photo-1-min.png 1230w"
@@ -658,8 +656,36 @@
               <p class="paragraph-3">po</p>
             </div>
           </div>
-        </div>
-        <div class="container">
+        </div> -->
+      <div class="container">
+        <p class="paragraph">Efekty naszej pracyi</p>
+        <h2>Galeria realizacji</h2>
+        
+          <div class="gallery-container">
+            <!-- Główny slider -->
+            <div class="slider-container">
+              <div class="slider" id="mainSlider">
+                <!-- Slajdy będą dodane przez JavaScript -->
+              </div>
+
+              <!-- Przyciski nawigacji -->
+              <div class="slider-nav slider-prev" id="prevSlide"></div>
+              <div class="slider-nav slider-next" id="nextSlide"></div>
+            </div>
+
+            <!-- Miniatury -->
+            <div class="thumbnails-container">
+              <div class="thumbnails-wrapper">
+                <div class="thumbnails" id="thumbnailsSlider">
+                  <!-- Miniatury będą dodane przez JavaScript -->
+                </div>
+              </div>
+              <div class="thumbnail-nav thumbnail-prev" id="prevThumbnail"></div>
+              <div class="thumbnail-nav thumbnail-next" id="nextThumbnail"></div>
+            </div>
+          </div>
+        
+        <div>
           <div class="button-wrapper">
             <a href="https://www.facebook.com/underpressureczyszczenie/" target="_blank" rel="noopener"
               class="button-outline w-button">Zobacz więcej</a>
@@ -1241,7 +1267,7 @@
     </section>
     <section class="container certificates-section">
       <p class="paragraph">Zdobyte doświadczenie</p>
-        <h2>Certyfikaty</h2>
+      <h2>Certyfikaty</h2>
       <div class="certificates-container">
         <div class="certificate" data-certificate-id="1">
           <img src="https://placehold.co/400x600" alt="Certyfikat JavaScript">
@@ -1666,6 +1692,365 @@
 
     // Ustawienie stylów dla przycisków nawigacji przy inicjalizacji
     prevButton.style.visibility = 'hidden';
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const galleryItems = Array.from({length: 28}, (_, i) => ({
+        id: i + 1,
+        before: {
+          url: `images//gallery/${i + 1}_before.webp`,
+          alt: `Stan przed remontem ${i + 1}`
+        },
+        after: {
+          url: `images/gallery/${i + 1}_after.webp`,
+          alt: `Stan po remoncie ${i + 1}`
+        }
+      }));
+
+      // Inicjalizacja zmiennych
+      let currentSlide = 0;
+      let thumbnailsPosition = 0;
+      let slideWidth = window.innerWidth;
+
+      const mainSlider = document.getElementById('mainSlider');
+      const thumbnailsSlider = document.getElementById('thumbnailsSlider');
+      const prevSlideBtn = document.getElementById('prevSlide');
+      const nextSlideBtn = document.getElementById('nextSlide');
+      const prevThumbnailBtn = document.getElementById('prevThumbnail');
+      const nextThumbnailBtn = document.getElementById('nextThumbnail');
+
+      // Tworzenie slajdów
+      function createSlides() {
+        galleryItems.forEach((item, index) => {
+          // Tworzenie głównego slajdu
+          const slide = document.createElement('div');
+          slide.className = `slide ${index === 0 ? 'active' : ''}`;
+          slide.dataset.index = index;
+
+          // Tworzenie kontenera na zdjęcia
+          const imagesContainer = document.createElement('div');
+          imagesContainer.className = 'images-container';
+
+          // Kontener zdjęcia "przed"
+          const beforeContainer = document.createElement('div');
+          beforeContainer.className = 'before-image';
+
+          const beforeImg = document.createElement('img');
+          beforeImg.alt = item.before.alt;
+          // Ładujemy tylko pierwsze 2 slajdy od razu
+          if (index <= 1) {
+            beforeImg.src = item.before.url;
+            beforeImg.loading = "eager";
+          } else {
+            beforeImg.dataset.src = item.before.url;
+            beforeImg.loading = "lazy";
+          }
+
+          const beforeLabel = document.createElement('div');
+          beforeLabel.className = 'label before-label';
+          beforeLabel.textContent = 'PRZED';
+
+          beforeContainer.appendChild(beforeImg);
+          beforeContainer.appendChild(beforeLabel);
+
+          // Kontener zdjęcia "po"
+          const afterContainer = document.createElement('div');
+          afterContainer.className = 'after-image';
+
+          const afterImg = document.createElement('img');
+          afterImg.alt = item.after.alt;
+          // Ładujemy tylko pierwsze 2 slajdy od razu
+          if (index <= 1) {
+            afterImg.src = item.after.url;
+            afterImg.loading = "eager";
+          } else {
+            afterImg.dataset.src = item.after.url;
+            afterImg.loading = "lazy";
+          }
+
+          const afterLabel = document.createElement('div');
+          afterLabel.className = 'label after-label';
+          afterLabel.textContent = 'PO';
+
+          afterContainer.appendChild(afterImg);
+          afterContainer.appendChild(afterLabel);
+
+          // Składanie kontenera zdjęć
+          imagesContainer.appendChild(beforeContainer);
+          imagesContainer.appendChild(afterContainer);
+
+          slide.appendChild(imagesContainer);
+          mainSlider.appendChild(slide);
+
+          // Tworzenie miniaturki
+          const thumbnail = document.createElement('div');
+          thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+          thumbnail.dataset.index = index;
+
+          const thumbnailImg = document.createElement('img');
+          thumbnailImg.alt = item.after.alt;
+          thumbnailImg.loading = "lazy";
+
+          if (index < 6) {
+            thumbnailImg.src = item.after.url;
+          } else {
+            thumbnailImg.dataset.src = item.after.url;
+          }
+
+          thumbnail.appendChild(thumbnailImg);
+          thumbnailsSlider.appendChild(thumbnail);
+        });
+
+        // Intersection Observer dla głównych slajdów
+        const slideObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const slide = entry.target;
+              const images = slide.querySelectorAll('img[data-src]');
+              images.forEach(img => {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              });
+              slideObserver.unobserve(slide);
+            }
+          });
+        }, {
+          rootMargin: '50px'
+        });
+
+        // Obserwuj wszystkie slajdy oprócz pierwszych dwóch
+        const lazySlides = mainSlider.querySelectorAll('.slide:not(:nth-child(-n+2))');
+        lazySlides.forEach(slide => slideObserver.observe(slide));
+
+        // Intersection Observer dla miniaturek
+        const thumbnailObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                thumbnailObserver.unobserve(img);
+              }
+            }
+          });
+        }, {
+          root: document.querySelector('.thumbnails-wrapper'),
+          rootMargin: '50px',
+          threshold: 0.1
+        });
+
+        // Obserwuj wszystkie miniaturki oprócz pierwszych 6
+        const lazyThumbnails = thumbnailsSlider.querySelectorAll('img[data-src]');
+        lazyThumbnails.forEach(img => thumbnailObserver.observe(img));
+      }
+
+      function preloadNextSlide(currentIndex) {
+        const nextIndex = (currentIndex + 1) % galleryItems.length;
+        const slides = mainSlider.querySelectorAll('.slide');
+        const nextSlide = slides[nextIndex];
+
+        if (nextSlide) {
+          // Znajdź obrazy które jeszcze nie są załadowane
+          const nextImages = nextSlide.querySelectorAll('img[data-src]');
+          nextImages.forEach(img => {
+            // Tworzymy nowy element Image do preloadowania
+            const preloadImg = new Image();
+            preloadImg.onload = () => {
+              // Po załadowaniu, aktualizujemy właściwy obraz
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+            };
+            preloadImg.src = img.dataset.src;
+          });
+        }
+      }
+
+      function updateNavigationArrows(index) {
+        // Ukryj strzałkę w lewo na pierwszym slajdzie
+        if (index === 0) {
+          prevSlideBtn.style.display = 'none';
+        } else {
+          prevSlideBtn.style.display = 'flex';
+        }
+      }
+
+      function updateThumbnailArrows() {
+        const isMobile = window.innerWidth <= 768;
+        const visibleThumbnails = isMobile ? 3 : 5;
+
+        // Ukryj strzałkę w lewo jeśli jesteśmy na początku
+        if (thumbnailsPosition === 0) {
+          prevThumbnailBtn.style.display = 'none';
+        } else {
+          prevThumbnailBtn.style.display = 'flex';
+        }
+
+        // Ukryj strzałkę w prawo jeśli jesteśmy na końcu
+        if (thumbnailsPosition >= galleryItems.length - visibleThumbnails) {
+          nextThumbnailBtn.style.display = 'none';
+        } else {
+          nextThumbnailBtn.style.display = 'flex';
+        }
+      }
+
+      function changeSlide(index) {
+        // Jeśli jesteśmy na ostatnim slajdzie i idziemy dalej, wróć na początek
+        if (index >= galleryItems.length) {
+          index = 0;
+        }
+        // Jeśli jesteśmy na pierwszym slajdzie i cofamy, idź na koniec
+        else if (index < 0) {
+          index = galleryItems.length - 1;
+        }
+
+        // Jeśli to ten sam slajd, nic nie rób
+        if (index === currentSlide) return;
+
+        // Aktualizacja aktywnego slajdu
+        const slides = mainSlider.querySelectorAll('.slide');
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+
+        // Załaduj obrazy dla aktualnego slajdu jeśli jeszcze nie są załadowane
+        const currentSlideImages = slides[index].querySelectorAll('img[data-src]');
+        currentSlideImages.forEach(img => {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        });
+
+        // Preloaduj następny slajd
+        preloadNextSlide(index);
+
+        // Aktualizuj widoczność strzałek
+        updateNavigationArrows(index);
+
+        // Aktualizacja aktywnej miniaturki
+        const thumbnails = thumbnailsSlider.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        thumbnails[index].classList.add('active');
+
+        // Dostosowanie pozycji miniaturek
+        const isMobile = window.innerWidth <= 768;
+        const visibleThumbnails = isMobile ? 3 : 5;
+
+        if (isMobile) {
+          // Na mobile aktywna miniaturka powinna być w środku
+          thumbnailsPosition = Math.max(0, Math.min(index - 1, galleryItems.length - visibleThumbnails));
+        } else {
+          // Logika dla desktopa
+          if (index >= visibleThumbnails + thumbnailsPosition) {
+            thumbnailsPosition = Math.min(index - visibleThumbnails + 1, galleryItems.length - visibleThumbnails);
+          } else if (index < thumbnailsPosition) {
+            thumbnailsPosition = index;
+          }
+        }
+
+        updateThumbnailsPosition();
+        updateThumbnailArrows();
+        currentSlide = index;
+      }
+
+      // Funkcja do aktualizacji pozycji miniaturek
+      function updateThumbnailsPosition() {
+        const isMobile = window.innerWidth <= 768;
+        const thumbnailWidth = isMobile ? 33.33 : 20; // szerokość w procentach (33.33% dla mobile - 3 zdjęcia, 20% dla desktop - 5 zdjęć)
+        thumbnailsSlider.style.transform = `translateX(-${thumbnailsPosition * thumbnailWidth}%)`;
+      }
+
+      // Funkcja do przesuwania miniaturek
+      function moveThumbnails(direction) {
+        const isMobile = window.innerWidth <= 768;
+        const visibleThumbnails = isMobile ? 3 : 5;
+        const maxPosition = Math.max(0, galleryItems.length - visibleThumbnails);
+
+        if (direction === 'next') {
+          thumbnailsPosition = Math.min(thumbnailsPosition + 1, maxPosition);
+        } else {
+          thumbnailsPosition = Math.max(thumbnailsPosition - 1, 0);
+        }
+
+        updateThumbnailsPosition();
+        updateThumbnailArrows();
+      }
+
+      // Inicjalizacja galerii
+      function initGallery() {
+        createSlides();
+        preloadNextSlide(0);
+        updateNavigationArrows(0);
+        updateThumbnailArrows();
+
+        // Obsługa kliknięć przycisków nawigacji dla głównego slidera
+        prevSlideBtn.addEventListener('click', () => {
+          changeSlide(currentSlide - 1);
+        });
+
+        nextSlideBtn.addEventListener('click', () => {
+          changeSlide(currentSlide + 1);
+        });
+
+        // Obsługa kliknięć przycisków nawigacji dla miniaturek
+        prevThumbnailBtn.addEventListener('click', () => {
+          moveThumbnails('prev');
+        });
+
+        nextThumbnailBtn.addEventListener('click', () => {
+          moveThumbnails('next');
+        });
+
+        // Obsługa kliknięć miniaturek
+        const thumbnails = thumbnailsSlider.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumbnail => {
+          thumbnail.addEventListener('click', () => {
+            const index = parseInt(thumbnail.dataset.index);
+            changeSlide(index);
+          });
+        });
+
+        // Zaktualizuj obsługę klawiatury
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft' && currentSlide > 0) {
+            changeSlide(currentSlide - 1);
+          } else if (e.key === 'ArrowRight') {
+            changeSlide(currentSlide + 1);
+          }
+        });
+
+        // Obsługa gestów
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        mainSlider.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        mainSlider.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+
+        function handleSwipe() {
+          if (touchEndX < touchStartX - 50) {
+            // Przesunięcie w lewo - następny slajd
+            changeSlide(currentSlide + 1);
+          } else if (touchEndX > touchStartX + 50 && currentSlide > 0) {
+            // Przesunięcie w prawo - poprzedni slajd
+            changeSlide(currentSlide - 1);
+          }
+        }
+
+        // Obsługa zmiany rozmiaru okna
+        window.addEventListener('resize', () => {
+          // Aktualizacja szerokości slajdu
+          slideWidth = window.innerWidth;
+        });
+      }
+
+      // Uruchomienie inicjalizacji galerii
+      initGallery();
+    });
   </script>
 </body>
 

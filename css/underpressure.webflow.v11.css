@@ -230,15 +230,16 @@ a {
 
 .hero-image-wraper {
 	z-index: 1;
-	max-width: 55%;
+	max-width: 45%;
 	position: relative;
 	width: 100%;
 	opacity: 0;
-	/* Zaczynamy od niewidocznego obrazu */
 	transform: scale(0.9);
-	/* Lekko pomniejszony na starcie */
 	animation: heroImageFadeIn 0.8s ease-out forwards;
-	/* Płynna animacja */
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-right: -10%;
 }
 
 @keyframes heroImageFadeIn {
@@ -2565,6 +2566,9 @@ img {
 		max-width: 20rem;
 		margin-left: auto;
 		margin-right: auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.header-top-banner {

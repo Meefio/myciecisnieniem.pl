@@ -2260,9 +2260,6 @@ a {
 
 /* Media Queries dla urządzeń mobilnych */
 @media (max-width: 768px) {
-	body {
-		padding: 20px 0;
-	}
 
 	.gallery-wrapper {
 		padding: 0 10px;

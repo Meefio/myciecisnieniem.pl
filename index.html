@@ -1847,24 +1847,24 @@
         lazyThumbnails.forEach(img => thumbnailObserver.observe(img));
       }
 
-      function preloadNextSlide(currentIndex) {
-        const nextIndex = (currentIndex + 1) % galleryItems.length;
-        const slides = mainSlider.querySelectorAll('.slide');
-        const nextSlide = slides[nextIndex];
+      function preloadNextSlides(currentIndex) {
+        // Preloaduj następne 3 slajdy
+        for (let i = 1; i <= 3; i++) {
+          const nextIndex = (currentIndex + i) % galleryItems.length;
+          const slides = mainSlider.querySelectorAll('.slide');
+          const nextSlide = slides[nextIndex];
 
-        if (nextSlide) {
-          // Znajdź obrazy które jeszcze nie są załadowane
-          const nextImages = nextSlide.querySelectorAll('img[data-src]');
-          nextImages.forEach(img => {
-            // Tworzymy nowy element Image do preloadowania
-            const preloadImg = new Image();
-            preloadImg.onload = () => {
-              // Po załadowaniu, aktualizujemy właściwy obraz
-              img.src = img.dataset.src;
-              img.removeAttribute('data-src');
-            };
-            preloadImg.src = img.dataset.src;
-          });
+          if (nextSlide) {
+            const nextImages = nextSlide.querySelectorAll('img[data-src]');
+            nextImages.forEach(img => {
+              const preloadImg = new Image();
+              preloadImg.onload = () => {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              };
+              preloadImg.src = img.dataset.src;
+            });
+          }
         }
       }
 
@@ -1909,6 +1909,9 @@
         // Jeśli to ten sam slajd, nic nie rób
         if (index === currentSlide) return;
 
+        // Preloaduj następne slajdy przed animacją zmiany
+        preloadNextSlides(index);
+
         // Aktualizacja aktywnego slajdu
         const slides = mainSlider.querySelectorAll('.slide');
         slides.forEach(slide => slide.classList.remove('active'));
@@ -1920,9 +1923,6 @@
           img.src = img.dataset.src;
           img.removeAttribute('data-src');
         });
-
-        // Preloaduj następny slajd
-        preloadNextSlide(index);
 
         // Aktualizuj widoczność strzałek
         updateNavigationArrows(index);
@@ -1979,7 +1979,7 @@
       // Inicjalizacja galerii
       function initGallery() {
         createSlides();
-        preloadNextSlide(0);
+        preloadNextSlides(0);
         updateNavigationArrows(0);
         updateThumbnailArrows();
 

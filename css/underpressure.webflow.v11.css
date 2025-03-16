@@ -651,11 +651,32 @@ a {
 }
 
 .section-gallery {
-	justify-content: center;
-	align-items: center;
-	display: flex;
-	padding-top: 100px;
-	padding-bottom: 100px;
+	opacity: 0;
+	transform: translateY(30px);
+}
+
+.section-gallery.animate {
+	animation: fadeIn 0.8s ease-out forwards, slideIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes slideIn {
+	0% {
+		transform: translateY(30px);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
 }
 
 @media screen and (max-width: 991px) {
@@ -1966,13 +1987,11 @@ a {
 
 @keyframes slideIn {
 	from {
-		transform: translate(-50%, -60%);
-		opacity: 0;
+		transform: translateY(30px);
 	}
 
-	to {
-		transform: translate(-50%, -50%);
-		opacity: 1;
+	100% {
+		transform: translateY(0);
 	}
 }
 

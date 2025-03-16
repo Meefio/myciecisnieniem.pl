@@ -2052,6 +2052,25 @@
       initGallery();
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animate');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.2
+        });
+
+        const animatedSections = document.querySelectorAll('.section-gallery, .certificates-section');
+        animatedSections.forEach(section => {
+          observer.observe(section);
+        });
+      });
+  </script>
 </body>
 
 </html>

@@ -660,31 +660,31 @@
       <div class="container">
         <p class="paragraph">Efekty naszej pracy</p>
         <h2>Galeria realizacji</h2>
-        
-          <div class="gallery-container">
-            <!-- Główny slider -->
-            <div class="slider-container">
-              <div class="slider" id="mainSlider">
-                <!-- Slajdy będą dodane przez JavaScript -->
-              </div>
 
-              <!-- Przyciski nawigacji -->
-              <div class="slider-nav slider-prev" id="prevSlide"></div>
-              <div class="slider-nav slider-next" id="nextSlide"></div>
+        <div class="gallery-container">
+          <!-- Główny slider -->
+          <div class="slider-container">
+            <div class="slider" id="mainSlider">
+              <!-- Slajdy będą dodane przez JavaScript -->
             </div>
 
-            <!-- Miniatury -->
-            <div class="thumbnails-container">
-              <div class="thumbnails-wrapper">
-                <div class="thumbnails" id="thumbnailsSlider">
-                  <!-- Miniatury będą dodane przez JavaScript -->
-                </div>
-              </div>
-              <div class="thumbnail-nav thumbnail-prev" id="prevThumbnail"></div>
-              <div class="thumbnail-nav thumbnail-next" id="nextThumbnail"></div>
-            </div>
+            <!-- Przyciski nawigacji -->
+            <div class="slider-nav slider-prev" id="prevSlide"></div>
+            <div class="slider-nav slider-next" id="nextSlide"></div>
           </div>
-        
+
+          <!-- Miniatury -->
+          <div class="thumbnails-container">
+            <div class="thumbnails-wrapper">
+              <div class="thumbnails" id="thumbnailsSlider">
+                <!-- Miniatury będą dodane przez JavaScript -->
+              </div>
+            </div>
+            <div class="thumbnail-nav thumbnail-prev" id="prevThumbnail"></div>
+            <div class="thumbnail-nav thumbnail-next" id="nextThumbnail"></div>
+          </div>
+        </div>
+
         <div>
           <div class="button-wrapper">
             <a href="https://www.facebook.com/underpressureczyszczenie/" target="_blank" rel="noopener"
@@ -1289,7 +1289,7 @@
       </div>
       </div>
     </section>
-    
+
 
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal" id="certificateModal">
@@ -1847,24 +1847,24 @@
         lazyThumbnails.forEach(img => thumbnailObserver.observe(img));
       }
 
-      function preloadNextSlides(currentIndex) {
-        // Preloaduj następne 3 slajdy
-        for (let i = 1; i <= 3; i++) {
-          const nextIndex = (currentIndex + i) % galleryItems.length;
-          const slides = mainSlider.querySelectorAll('.slide');
-          const nextSlide = slides[nextIndex];
+      function preloadNextSlide(currentIndex) {
+        const nextIndex = (currentIndex + 1) % galleryItems.length;
+        const slides = mainSlider.querySelectorAll('.slide');
+        const nextSlide = slides[nextIndex];
 
-          if (nextSlide) {
-            const nextImages = nextSlide.querySelectorAll('img[data-src]');
-            nextImages.forEach(img => {
-              const preloadImg = new Image();
-              preloadImg.onload = () => {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-              };
-              preloadImg.src = img.dataset.src;
-            });
-          }
+        if (nextSlide) {
+          // Znajdź obrazy które jeszcze nie są załadowane
+          const nextImages = nextSlide.querySelectorAll('img[data-src]');
+          nextImages.forEach(img => {
+            // Tworzymy nowy element Image do preloadowania
+            const preloadImg = new Image();
+            preloadImg.onload = () => {
+              // Po załadowaniu, aktualizujemy właściwy obraz
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+            };
+            preloadImg.src = img.dataset.src;
+          });
         }
       }
 
@@ -1909,9 +1909,6 @@
         // Jeśli to ten sam slajd, nic nie rób
         if (index === currentSlide) return;
 
-        // Preloaduj następne slajdy przed animacją zmiany
-        preloadNextSlides(index);
-
         // Aktualizacja aktywnego slajdu
         const slides = mainSlider.querySelectorAll('.slide');
         slides.forEach(slide => slide.classList.remove('active'));
@@ -1923,6 +1920,9 @@
           img.src = img.dataset.src;
           img.removeAttribute('data-src');
         });
+
+        // Preloaduj następny slajd
+        preloadNextSlide(index);
 
         // Aktualizuj widoczność strzałek
         updateNavigationArrows(index);
@@ -1979,7 +1979,7 @@
       // Inicjalizacja galerii
       function initGallery() {
         createSlides();
-        preloadNextSlides(0);
+        preloadNextSlide(0);
         updateNavigationArrows(0);
         updateThumbnailArrows();
 
@@ -2055,22 +2055,81 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('animate');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, {
-          threshold: 0.2
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
         });
-
-        const animatedSections = document.querySelectorAll('.section-gallery, .certificates-section');
-        animatedSections.forEach(section => {
-          observer.observe(section);
-        });
+      }, {
+        threshold: 0.2
       });
+
+      const animatedSections = document.querySelectorAll('.section-gallery, .certificates-section');
+      animatedSections.forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+  <script>
+    function loadImages() {
+      const images = document.querySelectorAll('img[data-src]');
+
+      images.forEach(img => {
+        // Sprawdzamy czy obraz jest w viewport lub blisko niego
+        if (isInViewport(img)) {
+          const preloadImg = new Image();
+
+          preloadImg.onload = () => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          };
+
+          preloadImg.onerror = () => {
+            console.error('Błąd ładowania:', img.dataset.src);
+            retryLoading(img);
+          };
+
+          preloadImg.src = img.dataset.src;
+        }
+      });
+    }
+
+    // Funkcja pomocnicza do sprawdzania czy element jest w viewport
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top >= -100 &&
+        rect.left >= -100 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 100 &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) + 100
+      );
+    }
+
+    // Funkcja do ponownych prób ładowania
+    function retryLoading(img, attempts = 3) {
+      let retryCount = 0;
+
+      const tryLoad = () => {
+        if (retryCount >= attempts) return;
+
+        const preloadImg = new Image();
+        preloadImg.onload = () => {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        };
+
+        preloadImg.onerror = () => {
+          retryCount++;
+          setTimeout(tryLoad, 1000);
+        };
+
+        preloadImg.src = img.dataset.src;
+      };
+
+      tryLoad();
+    }
   </script>
 </body>
 

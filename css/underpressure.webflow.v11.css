@@ -1921,6 +1921,10 @@ a {
 
 .close-button {
 	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1/1;
 	top: 3%;
 	right: 3%;
 	background-color: #fff;

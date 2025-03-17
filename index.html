@@ -1739,14 +1739,9 @@
 
           const beforeImg = document.createElement('img');
           beforeImg.alt = item.before.alt;
-          // Ładujemy tylko pierwsze 2 slajdy od razu
-          if (index <= 1) {
-            beforeImg.src = item.before.url;
-            beforeImg.loading = "eager";
-          } else {
-            beforeImg.dataset.src = item.before.url;
-            beforeImg.loading = "lazy";
-          }
+          beforeImg.src = item.before.url;
+          // Eager loading tylko dla pierwszych dwóch slajdów
+          beforeImg.loading = index <= 1 ? "eager" : "lazy";
 
           const beforeLabel = document.createElement('div');
           beforeLabel.className = 'label before-label';
@@ -1761,14 +1756,9 @@
 
           const afterImg = document.createElement('img');
           afterImg.alt = item.after.alt;
-          // Ładujemy tylko pierwsze 2 slajdy od razu
-          if (index <= 1) {
-            afterImg.src = item.after.url;
-            afterImg.loading = "eager";
-          } else {
-            afterImg.dataset.src = item.after.url;
-            afterImg.loading = "lazy";
-          }
+          afterImg.src = item.after.url;
+          // Eager loading tylko dla pierwszych dwóch slajdów
+          afterImg.loading = index <= 1 ? "eager" : "lazy";
 
           const afterLabel = document.createElement('div');
           afterLabel.className = 'label after-label';
@@ -1847,23 +1837,17 @@
         lazyThumbnails.forEach(img => thumbnailObserver.observe(img));
       }
 
+      // Zastępujemy starą funkcję preloadNextSlide nową
       function preloadNextSlide(currentIndex) {
         const nextIndex = (currentIndex + 1) % galleryItems.length;
         const slides = mainSlider.querySelectorAll('.slide');
         const nextSlide = slides[nextIndex];
 
         if (nextSlide) {
-          // Znajdź obrazy które jeszcze nie są załadowane
-          const nextImages = nextSlide.querySelectorAll('img[data-src]');
+          const nextImages = nextSlide.querySelectorAll('img');
           nextImages.forEach(img => {
-            // Tworzymy nowy element Image do preloadowania
-            const preloadImg = new Image();
-            preloadImg.onload = () => {
-              // Po załadowaniu, aktualizujemy właściwy obraz
-              img.src = img.dataset.src;
-              img.removeAttribute('data-src');
-            };
-            preloadImg.src = img.dataset.src;
+            // Wymuszamy eager loading dla następnego slajdu
+            img.loading = "eager";
           });
         }
       }
@@ -2071,65 +2055,6 @@
         observer.observe(section);
       });
     });
-  </script>
-  <script>
-    function loadImages() {
-      const images = document.querySelectorAll('img[data-src]');
-
-      images.forEach(img => {
-        // Sprawdzamy czy obraz jest w viewport lub blisko niego
-        if (isInViewport(img)) {
-          const preloadImg = new Image();
-
-          preloadImg.onload = () => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-          };
-
-          preloadImg.onerror = () => {
-            console.error('Błąd ładowania:', img.dataset.src);
-            retryLoading(img);
-          };
-
-          preloadImg.src = img.dataset.src;
-        }
-      });
-    }
-
-    // Funkcja pomocnicza do sprawdzania czy element jest w viewport
-    function isInViewport(element) {
-      const rect = element.getBoundingClientRect();
-      return (
-        rect.top >= -100 &&
-        rect.left >= -100 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 100 &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth) + 100
-      );
-    }
-
-    // Funkcja do ponownych prób ładowania
-    function retryLoading(img, attempts = 3) {
-      let retryCount = 0;
-
-      const tryLoad = () => {
-        if (retryCount >= attempts) return;
-
-        const preloadImg = new Image();
-        preloadImg.onload = () => {
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-        };
-
-        preloadImg.onerror = () => {
-          retryCount++;
-          setTimeout(tryLoad, 1000);
-        };
-
-        preloadImg.src = img.dataset.src;
-      };
-
-      tryLoad();
-    }
   </script>
 </body>
 

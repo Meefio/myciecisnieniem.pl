@@ -1056,22 +1056,20 @@
       <h2>Certyfikaty</h2>
       <div class="certificates-container">
         <div class="certificate" data-certificate-id="1">
-          <img src="https://placehold.co/400x600" alt="Certyfikat JavaScript">
-          <h3 class="certificate-title">Certyfikat 1</h3>
-          <p class="certificate-description">CLorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus iusto
-            nobis vel iste, culpa perspiciatis ea dignissimos sit illum laudantium!</p>
+          <img src="/images/certificates/certyfikat1.webp" alt="Certyfikat 1">
+          <h3 class="certificate-title">Schaich Chemie 3P</h3>
+          <p class="certificate-description">Specjalistyczne szkolenie w zakresie właściwego stosowania środków
+            chemicznych do mycia i impregnacji powierzchni budowlanych.</p>
         </div>
         <div class="certificate" data-certificate-id="2">
-          <img src="https://placehold.co/400x600" alt="Certyfikat HTML5 & CSS3">
-          <h3 class="certificate-title">Certyfikat 2</h3>
-          <p class="certificate-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus iusto
-            nobis vel iste, culpa perspiciatis ea dignissimos sit illum laudantium!</p>
+          <img src="/images/certificates/certyfikat2.webp" alt="Certyfikat 2">
+          <h3 class="certificate-title">BRAVOS</h3>
+          <p class="certificate-description">Zaawansowane szkolenie z techniki niskociśnieniowego mycia elewacji, usuwania zabrudzeń z powierzchni dachów oraz czyszczenia powierzchni szklanych.</p>
         </div>
         <div class="certificate" data-certificate-id="3">
-          <img src="https://placehold.co/400x600" alt="Certyfikat React.js">
-          <h3 class="certificate-title">Certyfikat 3</h3>
-          <p class="certificate-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus iusto
-            nobis vel iste, culpa perspiciatis ea dignissimos sit illum laudantium!</p>
+          <img src="/images/certificates/certyfikat3.webp" alt="Certyfikat 3">
+          <h3 class="certificate-title">Bekerfarb</h3>
+          <p class="certificate-description">Profesjonalne szkolenie z technologii renowacji pokryć dachowych.</p>
         </div>
       </div>
     </section>
@@ -1097,10 +1095,9 @@
       <div class="container">
         <div class="surface-summary-wrapper">
           <p class="surface-summary"><em>Nasze <strong>usługi mycia ciśnieniowego</strong> świadczymy głównie na terenie
-              <strong>Warszawy, Piaseczna</strong> oraz pobliskich miejscowości. Działamy również w okolicach takich jak
-              <strong>Józefów, Grójec, Otwock, Mszczonów, Góra Kalwaria, Magdalenka Żyrardów, Grodzisk Mazowiecki czy
-                Pruszków</strong>. Dzięki temu możemy oferować nasze profesjonalne usługi zarówno w dużych miastach, jak
-              i w mniejszych miejscowościach. Skontaktuj się z nami, aby dowiedzieć się, czy możemy świadczyć nasze
+              <strong>Warszawy, Piaseczna, Nadarzyna</strong> oraz pobliskich miejscowości. Działamy również w okolicach takich jak
+              <strong>Józefów, Grójec, Otwock, Mszczonów, Góra Kalwaria, Magdalenka Żyrardów, Grodzisk Mazowiecki, Konstancin Jeziorna czy
+                Pruszków</strong>. Skontaktuj się z nami, aby dowiedzieć się, czy możemy świadczyć nasze
               usługi także w Twojej okolicy.</em></p>
         </div>
       </div>
@@ -1120,7 +1117,6 @@
         <button class="nav-arrow" id="prevButton">←</button>
         <button class="nav-arrow" id="nextButton">→</button>
       </div>
-      <div class="nav-dots" id="navDots"></div>
     </div>
 
     <section id="kontakt" class="section-contact">
@@ -1342,20 +1338,19 @@
     const certificates = [
       {
         id: 1,
-        images: ['https://placehold.co/400x600', 'https://placehold.co/500x500', 'https://placehold.co/400x400']
+        image: '/images/certificates/certyfikat1.webp'
       },
       {
         id: 2,
-        images: ['https://placehold.co/400x600', 'https://placehold.co/400x600']
+        image: '/images/certificates/certyfikat2.webp'
       },
       {
         id: 3,
-        images: ['https://placehold.co/400x600', 'https://placehold.co/400x600', 'https://placehold.co/400x600']
+        image: '/images/certificates/certyfikat3.webp'
       }
     ];
 
-    let currentCertificateId = null;
-    let currentImageIndex = 0;
+    let currentCertificateIndex = 0;
 
     const certificateItems = document.querySelectorAll('.certificate');
     const certificateModal = document.getElementById('certificateModal');
@@ -1364,16 +1359,12 @@
     const closeModal = document.getElementById('closeModal');
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
-    const navDots = document.getElementById('navDots');
 
     function openModal(certificateId) {
-      currentCertificateId = certificateId;
-      currentImageIndex = 0;
+      currentCertificateIndex = certificates.findIndex(cert => cert.id === certificateId);
+      if (currentCertificateIndex === -1) return;
 
-      const certificate = certificates.find(cert => cert.id === certificateId);
-      if (!certificate) return;
-
-      modalImage.src = certificate.images[0];
+      modalImage.src = certificates[currentCertificateIndex].image;
       certificateModal.style.display = 'block';
       modalOverlay.style.display = 'block';
 
@@ -1382,9 +1373,7 @@
         certificateModal.classList.add('active');
       }, 10);
 
-      createNavigationDots(certificate.images.length);
       updateNavigationButtons();
-      updateActiveDot();
     }
 
     function closeModalFunc() {
@@ -1398,56 +1387,34 @@
     }
 
     function updateNavigationButtons() {
-      const certificate = certificates.find(cert => cert.id === currentCertificateId);
-      if (!certificate) return;
-
-      prevButton.style.visibility = currentImageIndex === 0 ? 'hidden' : 'visible';
-      nextButton.style.visibility = currentImageIndex === certificate.images.length - 1 ? 'hidden' : 'visible';
+      prevButton.style.visibility = currentCertificateIndex === 0 ? 'hidden' : 'visible';
+      nextButton.style.visibility = currentCertificateIndex === certificates.length - 1 ? 'hidden' : 'visible';
     }
 
-    function createNavigationDots(count) {
-      navDots.innerHTML = '';
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'nav-dot';
-        dot.addEventListener('click', () => goToImage(i));
-        navDots.appendChild(dot);
+    function goToPrevImage() {
+      if (currentCertificateIndex > 0) {
+        currentCertificateIndex--;
+        updateImage();
       }
     }
 
-    function updateActiveDot() {
-      const dots = navDots.querySelectorAll('.nav-dot');
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentImageIndex);
-      });
+    function goToNextImage() {
+      if (currentCertificateIndex < certificates.length - 1) {
+        currentCertificateIndex++;
+        updateImage();
+      }
     }
 
-    function goToImage(index) {
-      const certificate = certificates.find(cert => cert.id === currentCertificateId);
-      if (!certificate || index < 0 || index >= certificate.images.length) return;
-
-      currentImageIndex = index;
+    function updateImage() {
       modalImage.style.opacity = 0;
-
       setTimeout(() => {
-        modalImage.src = certificate.images[currentImageIndex];
+        modalImage.src = certificates[currentCertificateIndex].image;
         modalImage.style.opacity = 1;
         updateNavigationButtons();
-        updateActiveDot();
       }, 150);
     }
 
-    // Funkcja nawigująca do poprzedniego zdjęcia
-    function goToPrevImage() {
-      goToImage(currentImageIndex - 1);
-    }
-
-    // Funkcja nawigująca do następnego zdjęcia
-    function goToNextImage() {
-      goToImage(currentImageIndex + 1);
-    }
-
-    // Obsługa zdarzeń
+    // Event Listeners
     certificateItems.forEach(item => {
       item.addEventListener('click', function () {
         const certificateId = parseInt(this.getAttribute('data-certificate-id'));
@@ -1456,11 +1423,8 @@
     });
 
     closeModal.addEventListener('click', closeModalFunc);
-
     modalOverlay.addEventListener('click', closeModalFunc);
-
     prevButton.addEventListener('click', goToPrevImage);
-
     nextButton.addEventListener('click', goToNextImage);
 
     // Obsługa klawiszy
@@ -1476,13 +1440,10 @@
       }
     });
 
-    // Zapobiegaj zamknięciu modalu przy kliknięciu w sam modal (tylko overlay)
+    // Zapobiegaj zamknięciu modalu przy kliknięciu w sam modal
     certificateModal.addEventListener('click', function (e) {
       e.stopPropagation();
     });
-
-    // Ustawienie stylów dla przycisków nawigacji przy inicjalizacji
-    prevButton.style.visibility = 'hidden';
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

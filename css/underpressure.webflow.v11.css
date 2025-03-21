@@ -1807,7 +1807,8 @@ a {
 	background: var(--bg-gray);
 	border-radius: 14px;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-	padding: 1.5rem;
+	padding: 0.8rem;
+	/* zmniejszony padding */
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	cursor: pointer;
 	display: flex;
@@ -1823,9 +1824,13 @@ a {
 .certificate img {
 	width: 100%;
 	height: auto;
-	max-width: 280px;
+	aspect-ratio: 1.414 / 1;
+	/* format A4 poziomy */
+	max-width: 100%;
+	object-fit: cover;
 	border-radius: 14px;
-	margin-bottom: 1rem;
+	margin-bottom: 0.5rem;
+	/* zmniejszony margines */
 }
 
 .certificate-title {
@@ -1866,8 +1871,8 @@ a {
 	transform: translate(-50%, -50%) scale(0.9);
 	background-color: transparent;
 	z-index: 1001;
-	max-width: 85%;
-	max-height: 85vh;
+	width: 90vw;
+	max-height: 90vh;
 	overflow: hidden;
 	transition: all 0.3s ease;
 }
@@ -1878,7 +1883,7 @@ a {
 
 .modal-content {
 	position: relative;
-	background-color: white;
+	background-color: var(--bg-gray);
 	border-radius: 0.75rem;
 	padding: 10px;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);

@@ -2904,6 +2904,32 @@ img {
 	.link-block {
 		width: 40px;
 	}
+.creator-info {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	/* zmniejszony odstęp */
+	vertical-align: middle;
+}
+
+.footer-creator-logo {
+	height: 16px;
+	/* zmniejszona wysokość logo */
+	width: auto;
+	margin-bottom: 1px;
+	/* delikatne wyrównanie w pionie */
+}
+
+.credits {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	text-align: center;
+	margin: 0;
+	line-height: 1.5;
+}
 
 	.form-block {
 		width: 100%;

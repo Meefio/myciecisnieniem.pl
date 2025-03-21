@@ -1907,6 +1907,7 @@ a {
 .close-button {
 	position: absolute;
 	display: block;
+	padding: 0;
 	aspect-ratio: 1/1;
 	top: 3%;
 	right: 3%;

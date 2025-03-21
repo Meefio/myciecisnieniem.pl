@@ -747,27 +747,7 @@ a {
 	display: flex;
 }
 
-.slick-slide {
-	z-index: 1;
-	display: block;
-	position: relative;
-}
 
-.slick-slide.secondary {
-	flex: none;
-	margin-left: -7%;
-	margin-right: -7%;
-	display: block;
-	transform: scale(0.8);
-}
-
-.slick-slide.last {
-	display: none;
-}
-
-.slick-slide.center {
-	width: 150%;
-}
 
 .image-right {
 	width: auto;
@@ -3199,13 +3179,6 @@ img {
 
 	.gallery-slider {
 		margin-top: 20px;
-	}
-
-	.slick-slide {
-		align-items: center;
-		margin-left: auto;
-		margin-right: auto;
-		display: flex;
 	}
 
 	.section-experience {

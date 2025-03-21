@@ -1928,7 +1928,20 @@ a {
 .close-button:hover {
 	background-color: #f0f0f0;
 }
+.modal.loading .modal-image {
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out;
+}
 
+.modal .modal-image {
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.modal-content {
+	background: #f0f0f0;
+	/* kolor tła podczas ładowania */
+}
 /* Navigation arrows */
 .nav-arrows {
 	position: absolute;

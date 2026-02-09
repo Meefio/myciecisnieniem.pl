@@ -1,8 +1,8 @@
 export default function CTA() {
   return (
-    <div className="my-12 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
+    <div className="my-12 bg-bg-gray border-2 border-stroke-blue/30 rounded-2xl p-8 text-center">
       <h3 className="text-xl font-bold text-white mb-2">Potrzebujesz profesjonalnego czyszczenia?</h3>
-      <p className="text-white/60 mb-4">Zadzwon lub wypelnij formularz — wycena gratis!</p>
+      <p className="text-white/60 mb-6">Zadzwon lub wypelnij formularz — wycena gratis!</p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <a
           href="tel:507296296"
@@ -15,7 +15,7 @@ export default function CTA() {
         </a>
         <a
           href="/#kontakt"
-          className="inline-flex items-center gap-2 border border-primary text-primary font-medium px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors"
+          className="inline-flex items-center gap-2 border-2 border-primary text-primary font-medium px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors"
         >
           Wyslij zapytanie
         </a>

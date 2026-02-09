@@ -32,17 +32,21 @@ export default async function BlogPage({
         { label: 'Blog' },
       ]} />
 
-      <h1 className="text-4xl font-bold mb-8">Blog</h1>
+      {/* Section header - matching main site style */}
+      <div className="text-center mb-10">
+        <p className="text-primary font-medium text-sm uppercase tracking-wider mb-2">Wiedza i porady</p>
+        <h1 className="text-4xl font-bold">Nasz Blog</h1>
+      </div>
 
       {/* Category filter */}
       {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
           <Link
             href="/blog"
-            className={`text-sm px-4 py-2 rounded-full border transition-colors ${
+            className={`text-sm px-5 py-2.5 rounded-full border-2 transition-all font-medium ${
               !kategoria
                 ? 'bg-primary text-white border-primary'
-                : 'border-stroke/30 text-white/60 hover:text-white hover:border-primary/50'
+                : 'border-stroke/30 text-white/60 hover:text-white hover:border-stroke-blue/50'
             }`}
           >
             Wszystkie
@@ -51,10 +55,10 @@ export default async function BlogPage({
             <Link
               key={cat._id}
               href={`/blog?kategoria=${cat.slug.current}`}
-              className={`text-sm px-4 py-2 rounded-full border transition-colors ${
+              className={`text-sm px-5 py-2.5 rounded-full border-2 transition-all font-medium ${
                 kategoria === cat.slug.current
                   ? 'bg-primary text-white border-primary'
-                  : 'border-stroke/30 text-white/60 hover:text-white hover:border-primary/50'
+                  : 'border-stroke/30 text-white/60 hover:text-white hover:border-stroke-blue/50'
               }`}
             >
               {cat.title}

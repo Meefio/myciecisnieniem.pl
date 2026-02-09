@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: Props) {
   const imageUrl = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
 
   return (
-    <article>
+    <article className="bg-bg">
       {/* Hero section */}
       {post.mainImage && (
         <div className="relative w-full h-64 md:h-96 overflow-hidden">
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-4 -mt-24 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 -mt-24 relative z-10 pb-12">
         {/* Breadcrumbs */}
         <Breadcrumbs items={[
           { label: 'Strona glowna', href: '/' },
@@ -139,7 +139,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Related posts */}
         {relatedPosts.length > 0 && (
-          <section className="mt-16 pb-8">
+          <section className="mt-16 pb-4">
             <div className="text-center mb-8">
               <p className="text-primary font-medium text-sm uppercase tracking-wider mb-2">Czytaj dalej</p>
               <h2 className="text-2xl font-bold">Powiazane wpisy</h2>

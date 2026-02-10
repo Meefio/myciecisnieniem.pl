@@ -6,6 +6,8 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import Link from 'next/link'
 import { JsonLd } from '@/components/JsonLd'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Porady, realizacje i wskazowki dotyczace profesjonalnego mycia cisnieniowego. Kostka brukowa, elewacja, dach i wiecej.',

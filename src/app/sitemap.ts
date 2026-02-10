@@ -1,3 +1,5 @@
+export const revalidate = 60
+
 import type { MetadataRoute } from 'next'
 import { client } from '@/sanity/lib/client'
 import { SITEMAP_QUERY } from '@/sanity/lib/queries'

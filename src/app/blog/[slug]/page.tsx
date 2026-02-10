@@ -13,6 +13,8 @@ import BlogCard from '@/components/BlogCard'
 import { JsonLd } from '@/components/JsonLd'
 import { getReadingTime } from '@/components/utils'
 
+export const revalidate = 60
+
 type Props = {
   params: Promise<{ slug: string }>
 }
